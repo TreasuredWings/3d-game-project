@@ -1,29 +1,40 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public float gravity = 0.8f;
+    [Header("Movement Parameters")]
+    public float topSpeed = 3f;
     public float acceleration = 0.5f;
     public float deceleration = 0.5f;
-    public float topSpeed = 3f;
-    public float jumpHeight = 5f;
-    public bool showTrail = false;
 
+    [Header("Jumping and Falling Parameters")]
+    public float jumpHeight = 5f;
+    public float risingGravity = -9.81f;
+    public float fallingGravity = -9.81f;
+    public int airJumps = 1;
+
+    [Header("Component References")]
     public CharacterController controller;
+
+    [Header("Action References")]
+    public InputActionReference moveAction;
+    public InputActionReference jumpAction;
+
+    [Header("Debug Toggles")]
+    public bool showTrail = false;
 
     private Vector3 playerVelocity;
     private float currentSpeed = 0f;
     private bool grounded;
-
-    public InputActionReference moveAction;
-    public InputActionReference jumpAction;
+    private int airJumpsReset;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        airJumpsReset = airJumps;
     }
 
     private void OnEnable()
@@ -41,16 +52,23 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Debug trail
         if (showTrail)
         {
-            // Add a trail to the player's center
+            // TODO: Add a trail to the player's center
         }
 
         // Prevent falling through the floor
         grounded = controller.isGrounded;
-        if (grounded && playerVelocity.y > 0)
+        if (grounded && playerVelocity.y < 0)
         {
             playerVelocity.y = 0;
+        }
+
+        // Reset air jumps
+        if (grounded)
+        {
+            airJumps = airJumpsReset;
         }
 
         // Read input
@@ -58,6 +76,7 @@ public class Player : MonoBehaviour
         Vector3 move = new Vector3(input.x, 0, input.y);
         move = Vector3.ClampMagnitude(move, 1f);
 
+        // Check for direction being held
         if (move != Vector3.zero)
         {
             transform.forward = move;
@@ -68,6 +87,7 @@ public class Player : MonoBehaviour
             currentSpeed -= deceleration;
         }
 
+        // Bind currentSpeed by 0 and topSpeed
         if (currentSpeed > topSpeed)
         {
             currentSpeed = topSpeed;
@@ -78,13 +98,24 @@ public class Player : MonoBehaviour
         }
 
         // Handle jumping
-        if (grounded && jumpAction.action.triggered)
+        if ((grounded && jumpAction.action.triggered) || (airJumps > 0 && jumpAction.action.triggered))
         {
-            playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravity);
+            playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * risingGravity);
+            if (!grounded)
+            {
+                airJumps--;
+            }
         }
 
         // Apply gravity
-        playerVelocity.y += gravity * Time.deltaTime;
+        if (playerVelocity.y > 0)
+        {
+            playerVelocity.y += risingGravity * Time.deltaTime;
+        }
+        else
+        {
+            playerVelocity.y += fallingGravity * Time.deltaTime;
+        }
 
         // Combine all movement
         Vector3 finalMove = (move * currentSpeed) + (playerVelocity.y * Vector3.up);

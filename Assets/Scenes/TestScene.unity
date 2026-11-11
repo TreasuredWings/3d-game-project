@@ -281,11 +281,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46572e3e0822f954f8056c99627974f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  gravity: -9.81
+  fallingGravity: -80
+  risingGravity: -50
   acceleration: 1
   deceleration: 2
   topSpeed: 10
   jumpHeight: 5
+  airJumps: 1
   showTrail: 0
   controller: {fileID: 76666984}
   moveAction: {fileID: -1680190386980627800, guid: 405e0ade6a672b3498761152fada11cd, type: 3}
