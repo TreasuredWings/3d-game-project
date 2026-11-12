@@ -88,14 +88,7 @@ public class Player : MonoBehaviour
         }
 
         // Bind currentSpeed by 0 and topSpeed
-        if (currentSpeed > topSpeed)
-        {
-            currentSpeed = topSpeed;
-        }
-        else if (currentSpeed < 0)
-        {
-            currentSpeed = 0;
-        }
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, topSpeed);
 
         // Handle jumping
         if ((grounded && jumpAction.action.triggered) || (airJumps > 0 && jumpAction.action.triggered))
