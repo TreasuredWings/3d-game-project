@@ -6,10 +6,12 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     public float lookSpeed = 3f;
-    public float orbitDamping = 10f;
+    public float verticalLowerBoundAngle = 0f;
+    public float verticalUpperBoundAngle = 80f;
     public InputActionReference lookAction;
 
-    private Vector3 lookVector;
+    private Vector3 lookDelta;
+    public Vector3 lookVector;
 
     private void AdjustCameraOrientation()
     {
@@ -20,8 +22,18 @@ public class CameraController : MonoBehaviour
         // look then clamps the magnitude to 1 unit, then multiplies by the lookSpeed
         // This gives us the distance TO MOVE, not the final position
         look = Vector2.ClampMagnitude(look, 1f) * lookSpeed;
-        Vector3 convertedLook = new Vector3(-look.y, look.x, 0);
-        transform.eulerAngles += convertedLook * Time.deltaTime;
+        lookDelta = new Vector3(-look.y, look.x, 0) * Time.deltaTime;
+        lookVector += lookDelta;
+        lookVector.x = Mathf.Clamp(lookVector.x, verticalLowerBoundAngle, verticalUpperBoundAngle);
+        if (lookVector.y > 180)
+        {
+            lookVector.y -= 360f;
+        }
+        else if (lookVector.y < -180)
+        {
+            lookVector.y += 360f;
+        }
+        transform.eulerAngles = lookVector;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
