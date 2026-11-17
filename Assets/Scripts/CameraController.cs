@@ -10,41 +10,39 @@ public class CameraController : MonoBehaviour
     public float verticalUpperBoundAngle = 80f;
     public InputActionReference lookAction;
 
-    private Vector3 lookDelta;
-    private Vector3 lookVector;
+    private Vector3 _lookVector;
+    private Vector3 _lookAngle;
 
     private void AdjustCameraOrientation()
     {
         // Track the target's position
         transform.position = target.transform.position;
-
-        // look takes the value of lookAction (x, y)
-        Vector2 look = lookAction.action.ReadValue<Vector2>();
-        // look then clamps the magnitude to 1 unit, then multiplies by the lookSpeed
-        look = Vector2.ClampMagnitude(look, 1f) * lookSpeed;
-        // Create a look delta and assign the correct properties for it
-        lookDelta = new Vector3(-look.y, look.x, 0) * Time.deltaTime;
+        
+        // Get a look vector from input manager
+        _lookVector = InputManager.inst.GetLookVector();
+        // Increase the speed by the look speed and adjust for framerate
+        _lookVector = _lookVector * lookSpeed * Time.deltaTime;
         // Add the look delta to the look vector
-        lookVector += lookDelta;
+        _lookAngle += _lookVector;
         // Clamp the look's vertical angle to the bounds
-        lookVector.x = Mathf.Clamp(lookVector.x, verticalLowerBoundAngle, verticalUpperBoundAngle);
+        _lookAngle.x = Mathf.Clamp(_lookAngle.x, verticalLowerBoundAngle, verticalUpperBoundAngle);
         // Reset the horizontal angle to prevent overflow
-        if (lookVector.y > 180)
+        if (_lookAngle.y > 180)
         {
-            lookVector.y -= 360f;
+            _lookAngle.y -= 360f;
         }
-        else if (lookVector.y < -180)
+        else if (_lookAngle.y < -180)
         {
-            lookVector.y += 360f;
+            _lookAngle.y += 360f;
         }
         // Set the rotation of the camera to the look vector's angles
-        transform.eulerAngles = lookVector;
+        transform.eulerAngles = _lookAngle;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        lookVector = Vector3.zero;
+        _lookAngle = Vector3.zero;
     }
 
     // Update is called once per frame

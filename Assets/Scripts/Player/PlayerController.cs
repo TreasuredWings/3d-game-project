@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement Parameters")]
     public float topSpeed = 3f;
@@ -20,12 +18,7 @@ public class Player : MonoBehaviour
     public CharacterController controller;
     public Transform camera;
 
-    [Header("Action References")]
-    public InputActionReference moveAction;
-    public InputActionReference jumpAction;
-
     [Header("Debug Toggles")]
-    public bool showTrail = false;
 
     private Vector3 playerVelocity;
     private float currentSpeed = 0f;
@@ -38,27 +31,9 @@ public class Player : MonoBehaviour
         airJumpsReset = airJumps;
     }
 
-    private void OnEnable()
-    {
-        moveAction.action.Enable();
-        jumpAction.action.Enable();
-    }
-
-    private void OnDisable()
-    {
-        moveAction.action.Disable();
-        jumpAction.action.Disable();
-    }
-
     // Update is called once per frame
     void Update()
     {
-        // Debug trail
-        if (showTrail)
-        {
-            // TODO: Add a trail to the player's center
-        }
-
         // Prevent falling through the floor
         grounded = controller.isGrounded;
         if (grounded && playerVelocity.y < 0)
@@ -73,9 +48,7 @@ public class Player : MonoBehaviour
         }
 
         // Read input
-        Vector2 input = moveAction.action.ReadValue<Vector2>();
-        Vector3 move = new Vector3(input.x, 0, input.y);
-        move = Vector3.ClampMagnitude(move, 1f);
+        Vector3 move = InputManager.inst.GetMoveVector();
 
         // Get camera rotation, projected on a horizontal plane
         Vector3 flatCameraDirection = Vector3.ProjectOnPlane(camera.forward, Vector3.up);
@@ -99,7 +72,8 @@ public class Player : MonoBehaviour
         currentSpeed = Mathf.Clamp(currentSpeed, 0, topSpeed);
 
         // Handle jumping
-        if ((grounded && jumpAction.action.triggered) || (airJumps > 0 && jumpAction.action.triggered))
+        bool jumpTriggered = InputManager.inst.JumpPressed();
+        if ((grounded && jumpTriggered) || (airJumps > 0 && jumpTriggered))
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * risingGravity);
             if (!grounded)
