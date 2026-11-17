@@ -3,7 +3,7 @@ Group 8's 3D Game Project for CS 583
 
 ## Members and Tasks:
 - Gregory Larson: player movement, abilities, and controls
-- Troy Jabo
+- Troy Jabo: Art, 3d modeling, animation
 - Moe Htun: player health, obstacle damage, and respawning
 - Kristian Chamian
 
