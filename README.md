@@ -4,7 +4,7 @@ Group 8's 3D Game Project for CS 583
 ## Members and Tasks:
 - Gregory Larson: player movement, abilities, and controls
 - Troy Jabo
-- Moe Htun
+- Moe Htun: player health, obstacle damage, and respawning
 - Kristian Chamian
 
 ## Current Concept:
@@ -17,6 +17,9 @@ A 3D platformer metroidvania about climbing a skyscraper to prove yourself to th
 - [ ] Create a few interactable objects and ways to interact with them
 - [ ] Create some obstacles that could harm the player
 - [ ] Create a level to try and navigate from start to finish
+- [ ] (Claimed by Moe) Implement player health and damage system
+- [ ] (Claimed by Moe) Make spikes deal damage when touched
+- [ ] (Claimed by Moe) Add player death and respawning
 
 ## Design Document for the Team
 [https://docs.google.com/document/d/1RkKXFzx0V5vQ3dLjRhGI83h_4syWZbUnR4i0GUTA0MA/edit?usp=sharing]
