@@ -836,6 +836,10 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1597658507}
+    - target: {fileID: 3725296675192149120, guid: 1dfb6bee92cdb1143957a06c86c403d3, type: 3}
+      propertyPath: airJumps
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
