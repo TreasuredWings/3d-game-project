@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 390075544012329200}
   - component: {fileID: 6241381592490433023}
   - component: {fileID: 2078749403087576845}
-  - component: {fileID: 3725296675192149120}
+  - component: {fileID: 6449107588872117372}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -365,7 +365,7 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &3725296675192149120
+--- !u!114 &6449107588872117372
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -374,15 +374,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2284001420706802784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46572e3e0822f954f8056c99627974f3, type: 3}
+  m_Script: {fileID: 11500000, guid: d033c9078d7b1c2898f876cc46c0d18a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  topSpeed: 10
-  acceleration: 1
-  deceleration: 2
-  jumpHeight: 5
-  risingGravity: -50
-  fallingGravity: -80
-  airJumps: 1
-  controller: {fileID: 6241381592490433023}
-  camera: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  TopSpeed: 10
+  Acceleration: 1
+  Deceleration: 2
+  JumpHeight: 5
+  RisingGravity: 50
+  FallingGravity: 80
+  AirActions: 1
+  Controller: {fileID: 6241381592490433023}
+  Camera: {fileID: 0}
