@@ -34,17 +34,11 @@ public class OldPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Prevent falling through the floor
+        // Prevent gravity from endlessly increasing
         grounded = controller.isGrounded;
-        if (grounded && playerVelocity.y < 0)
+        if (grounded && playerVelocity.y < fallingGravity)
         {
-            playerVelocity.y = 0;
-        }
-
-        // Reset air jumps
-        if (grounded)
-        {
-            airJumps = airJumpsReset;
+            playerVelocity.y = fallingGravity;
         }
 
         // Read input
@@ -72,7 +66,7 @@ public class OldPlayerController : MonoBehaviour
         currentSpeed = Mathf.Clamp(currentSpeed, 0, topSpeed);
 
         // Handle jumping
-        bool jumpTriggered = InputManager.inst.JumpPressed();
+        bool jumpTriggered = InputManager.inst.IsJumpPressed();
         if ((grounded && jumpTriggered) || (airJumps > 0 && jumpTriggered))
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * risingGravity);

@@ -10,11 +10,29 @@ public class InputManager : MonoBehaviour
     public InputActionReference MoveAction;
     public InputActionReference JumpAction;
 
+    public bool IsMoving()
+    {
+        if (MoveAction.action.ReadValue<Vector2>() != Vector2.zero)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public Vector3 GetMoveVector()
     {
         Vector2 input = MoveAction.action.ReadValue<Vector2>();
         Vector3 value = new Vector3(input.x, 0, input.y);
         return value;
+    }
+
+    public bool IsLooking()
+    {
+        if (LookAction.action.ReadValue<Vector2>() != Vector2.zero)
+        {
+            return true;
+        }
+        return false;
     }
 
     public Vector3 GetLookVector()
@@ -24,7 +42,7 @@ public class InputManager : MonoBehaviour
         return value;
     }
 
-    public bool JumpPressed()
+    public bool IsJumpPressed()
     {
         return JumpAction.action.triggered;
     }

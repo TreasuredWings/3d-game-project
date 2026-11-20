@@ -8,7 +8,6 @@ public class CameraController : MonoBehaviour
     public float lookSpeed = 3f;
     public float verticalLowerBoundAngle = 0f;
     public float verticalUpperBoundAngle = 80f;
-    public InputActionReference lookAction;
 
     private Vector3 _lookVector;
     private Vector3 _lookAngle;
