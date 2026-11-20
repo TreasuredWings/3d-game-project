@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class PlayerIdle : IPlayerState
 {
-    public PlayerIdle(PlayerController context)
+    public PlayerIdle()
     {
         // Initialization
-        Debug.Log("PlayerIdle state instantiated");
     }
 
     public override void StateEnter(PlayerController context)
@@ -17,11 +16,14 @@ public class PlayerIdle : IPlayerState
     public override void StateUpdate(PlayerController context)
     {
         // Apply gravity
-
-        // Apply deceleration
+        context.VerticalSpeed = -context.FallingGravity;
+        // Apply deceleration to speed
         context.CurrentSpeed -= context.Deceleration;
         context.CurrentSpeed = Mathf.Clamp(context.CurrentSpeed, 0, context.TopSpeed);
+    }
 
+    public override void StateCheck(PlayerController context)
+    {
         // Transitions
         // If the jump button is pressed
         // Go to the jumping state
@@ -42,6 +44,5 @@ public class PlayerIdle : IPlayerState
     public override void StateExit(PlayerController context)
     {
         // Not sure what to do here
-        Debug.Log("PlayerIdle state exiting");
     }
 }

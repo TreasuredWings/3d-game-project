@@ -1,4 +1,3 @@
-using System.Data;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -33,6 +32,8 @@ public class PlayerController : MonoBehaviour
     public bool JumpActive {get; set;} = false;
 
     // Movement-related variables
+    public Vector3 HorizontalMovement {get; set;} = new Vector3();
+    public float VerticalSpeed {get; set;} = 0f;
     public Vector3 AppliedMovement {get; set;} = new Vector3();
     public float CurrentSpeed {get; set;} = 0f;
 
@@ -72,11 +73,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ApplyMoves()
+    {
+        HorizontalMovement = transform.forward;
+        AppliedMovement = HorizontalMovement * CurrentSpeed + Vector3.up * VerticalSpeed;
+        Controller.Move(AppliedMovement * Time.deltaTime);
+    }
+
     // MonoBehavior fuctions
 
     void Start()
     {
-        _state = new PlayerIdle(this);
+        _state = new PlayerIdle();
+        _state.StateEnter(this);
     }
 
     // Update
@@ -85,8 +94,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleInput();
-        State.StateUpdate(this);
         HandleRotate();
-        Controller.Move(AppliedMovement * Time.deltaTime);
+        _state.StateUpdate(this);
+        ApplyMoves();
+    }
+
+    void LateUpdate()
+    {
+        _state.StateCheck(this);
     }
 }
