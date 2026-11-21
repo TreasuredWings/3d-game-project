@@ -4,28 +4,53 @@ public class PlayerJumping : IPlayerState
 {
     public PlayerJumping()
     {
-        
+        // Constructor if needed
     }
 
-    public override void StateEnter(PlayerController context)
+    public override void StateEnter(PlayerController player)
     {
-        Debug.Log("PlayerJumping state entered");
+        // Set new substate
+        if (player.MoveInputActive)
+        {
+            player.SwitchSubState(new PlayerRunning());
+        }
+        else
+        {
+            player.SwitchSubState(new PlayerIdle());
+        }
+
         // Apply jump force
-        context.VerticalSpeed = Mathf.Sqrt(context.JumpHeight * 2f * context.RisingGravity);
+        player.VerticalSpeed = Mathf.Sqrt(player.JumpHeight * 2f * player.RisingGravity);
+
+        Debug.Log("PlayerJumping state entered");
     }
 
-    public override void StateUpdate(PlayerController context)
+    public override void StateCheck(PlayerController player)
+    {
+        // Check transitions
+        // Possible states to switch to:
+        // Grounded, Falling
+        
+        if (player.Controller.isGrounded)
+        {
+            player.SwitchState(new PlayerGrounded());
+            return;
+        }
+
+        if (player.VerticalSpeed <= 0)
+        {
+            player.SwitchState(new PlayerFalling());
+            return;
+        }
+    }
+
+    public override void StateUpdate(PlayerController player)
     {
         // Apply gravity
-        context.VerticalSpeed = -context.RisingGravity;
+        player.VerticalSpeed += -player.RisingGravity * Time.deltaTime;
     }
 
-    public override void StateCheck(PlayerController context)
-    {
-        
-    }
-
-    public override void StateExit(PlayerController context)
+    public override void StateExit(PlayerController player)
     {
         
     }

@@ -8,29 +8,28 @@ public class PlayerRunning : IPlayerState
         
     }
 
-    public override void StateEnter(PlayerController context)
+    public override void StateEnter(PlayerController player)
     {
-        Debug.Log("PlayerRunning state entered");
+        //Debug.Log("PlayerRunning state entered");
     }
 
-    public override void StateUpdate(PlayerController context)
+    public override void StateCheck(PlayerController player)
     {
-        // Apply gravity
-        context.VerticalSpeed = -context.FallingGravity;
-
-        // Accelerate
-        context.CurrentSpeed += context.Acceleration;
-        context.CurrentSpeed = Mathf.Clamp(context.CurrentSpeed, 0, context.TopSpeed);
-    }
-    public override void StateCheck(PlayerController context)
-    {
-        if (!context.MoveInputActive)
+        if (!player.MoveInputActive)
         {
-            context.SwitchState(new PlayerIdle());
+            player.SwitchSubState(new PlayerIdle());
+            return;
         }
     }
 
-    public override void StateExit(PlayerController context)
+    public override void StateUpdate(PlayerController player)
+    {
+        // Accelerate
+        player.CurrentSpeed += player.Acceleration;
+        player.CurrentSpeed = Mathf.Clamp(player.CurrentSpeed, 0, player.TopSpeed);
+    }
+
+    public override void StateExit(PlayerController player)
     {
         
     }

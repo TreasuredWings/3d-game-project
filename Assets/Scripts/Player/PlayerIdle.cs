@@ -7,41 +7,31 @@ public class PlayerIdle : IPlayerState
         // Initialization
     }
 
-    public override void StateEnter(PlayerController context)
+    public override void StateEnter(PlayerController player)
     {
         // Do animation calls
-        Debug.Log("PlayerIdle state entered");
+        //Debug.Log("PlayerIdle state entered");
     }
 
-    public override void StateUpdate(PlayerController context)
+    public override void StateCheck(PlayerController player)
     {
-        // Apply gravity
-        context.VerticalSpeed = -context.FallingGravity;
-        // Apply deceleration to speed
-        context.CurrentSpeed -= context.Deceleration;
-        context.CurrentSpeed = Mathf.Clamp(context.CurrentSpeed, 0, context.TopSpeed);
-    }
-
-    public override void StateCheck(PlayerController context)
-    {
-        // Transitions
-        // If the jump button is pressed
-        // Go to the jumping state
-        if (context.MoveInputActive)
-        {
-            context.SwitchState(new PlayerRunning());
-        }
-
         // If the left stick is tilted
         // Go to the moving state
-
-        if (!context.Controller.isGrounded)
+        if (player.MoveInputActive)
         {
-            // Go to falling state
+            player.SwitchSubState(new PlayerRunning());
+            return;
         }
     }
 
-    public override void StateExit(PlayerController context)
+    public override void StateUpdate(PlayerController player)
+    {
+        // Apply deceleration to speed
+        player.CurrentSpeed -= player.Deceleration;
+        player.CurrentSpeed = Mathf.Clamp(player.CurrentSpeed, 0, player.TopSpeed);
+    }
+
+    public override void StateExit(PlayerController player)
     {
         // Not sure what to do here
     }

@@ -20,11 +20,13 @@ public class PlayerController : MonoBehaviour
     // Private variables
 
     private IPlayerState _state;
+    private IPlayerState _subState;
 
     // Getters and setters
 
     // State-related variables
     public IPlayerState State {get {return _state;}}
+    public IPlayerState SubState {get {return _subState;}}
 
     // Input-related variables
     public bool MoveInputActive {get; set;} = false;
@@ -43,7 +45,21 @@ public class PlayerController : MonoBehaviour
     {
         _state.StateExit(this);
         _state = newState;
+        _subState = null;
         _state.StateEnter(this);
+    }
+
+    public void SwitchSubState(IPlayerState newSubState)
+    {
+        if (_subState != null)
+        {
+            _subState.StateExit(this);
+        }
+        _subState = newSubState;
+        if (_subState != null)
+        {
+            _subState.StateEnter(this);
+        }
     }
 
     public void HandleInput()
@@ -76,7 +92,7 @@ public class PlayerController : MonoBehaviour
     public void ApplyMoves()
     {
         HorizontalMovement = transform.forward;
-        AppliedMovement = HorizontalMovement * CurrentSpeed + Vector3.up * VerticalSpeed;
+        AppliedMovement = (HorizontalMovement * CurrentSpeed) + (Vector3.up * VerticalSpeed);
         Controller.Move(AppliedMovement * Time.deltaTime);
     }
 
@@ -84,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _state = new PlayerIdle();
+        _state = new PlayerFalling();
         _state.StateEnter(this);
     }
 
@@ -93,14 +109,25 @@ public class PlayerController : MonoBehaviour
     // All other functionality must be within its own state
     void Update()
     {
+        // Process inputs from the player
         HandleInput();
+
+        // Check for any needed state transitions based on player input
+        _state.StateCheck(this);
+        if (_subState != null)
+        {
+            _subState.StateCheck(this);
+        }
+
+        // Handle each state from Super -> Sub
         HandleRotate();
         _state.StateUpdate(this);
-        ApplyMoves();
-    }
+        if (_subState != null)
+        {
+            _subState.StateUpdate(this);
+        }
 
-    void LateUpdate()
-    {
-        _state.StateCheck(this);
+        // Finalize movement and apply it
+        ApplyMoves();
     }
 }
