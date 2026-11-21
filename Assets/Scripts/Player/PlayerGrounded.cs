@@ -9,6 +9,9 @@ public class PlayerGrounded : IPlayerState
 
     public override void StateEnter(PlayerController player)
     {
+        // Reset player dashes
+        player.DashCount = player.DashMax;
+
         // Set new substate
         if (player.MoveInputActive)
         {
@@ -31,6 +34,12 @@ public class PlayerGrounded : IPlayerState
         if (player.JumpActive)
         {
             player.SwitchState(new PlayerJumping());
+            return;
+        }
+
+        if (player.DashActive && player.DashCount >= 1)
+        {
+            player.SwitchState(new PlayerDashing());
             return;
         }
 

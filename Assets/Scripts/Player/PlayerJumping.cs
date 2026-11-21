@@ -30,6 +30,12 @@ public class PlayerJumping : IPlayerState
         // Check transitions
         // Possible states to switch to:
         // Grounded, Falling
+
+        if (player.DashActive && player.DashCount >= 1)
+        {
+            player.SwitchState(new PlayerDashing());
+            return;
+        }
         
         if (player.Controller.isGrounded)
         {

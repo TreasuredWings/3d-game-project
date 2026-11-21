@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public InputActionReference LookAction;
     public InputActionReference MoveAction;
     public InputActionReference JumpAction;
+    public InputActionReference DashAction;
 
     public bool IsMoving()
     {
@@ -47,9 +48,16 @@ public class InputManager : MonoBehaviour
         return JumpAction.action.triggered;
     }
 
+    public bool IsDashPressed()
+    {
+        return DashAction.action.triggered;
+    }
+
     void Start()
     {
         inst = this;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void OnEnable()

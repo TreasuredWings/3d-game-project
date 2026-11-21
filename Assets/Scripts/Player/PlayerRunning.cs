@@ -24,6 +24,8 @@ public class PlayerRunning : IPlayerState
 
     public override void StateUpdate(PlayerController player)
     {
+        // Rotate to face stick direction
+        player.transform.forward = player.IncomingMovement;
         // Accelerate
         player.CurrentSpeed += player.Acceleration;
         player.CurrentSpeed = Mathf.Clamp(player.CurrentSpeed, 0, player.TopSpeed);

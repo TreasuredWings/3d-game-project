@@ -190,6 +190,7 @@ MonoBehaviour:
   LookAction: {fileID: -5630151704836100654, guid: 405e0ade6a672b3498761152fada11cd, type: 3}
   MoveAction: {fileID: -1680190386980627800, guid: 405e0ade6a672b3498761152fada11cd, type: 3}
   JumpAction: {fileID: -2099379676528639254, guid: 405e0ade6a672b3498761152fada11cd, type: 3}
+  DashAction: {fileID: 6569330118769513687, guid: 405e0ade6a672b3498761152fada11cd, type: 3}
 --- !u!4 &300688475
 Transform:
   m_ObjectHideFlags: 0
@@ -835,6 +836,18 @@ PrefabInstance:
       propertyPath: Camera
       value: 
       objectReference: {fileID: 1597658507}
+    - target: {fileID: 6449107588872117372, guid: 1dfb6bee92cdb1143957a06c86c403d3, type: 3}
+      propertyPath: DashMax
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6449107588872117372, guid: 1dfb6bee92cdb1143957a06c86c403d3, type: 3}
+      propertyPath: DashSpeed
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6449107588872117372, guid: 1dfb6bee92cdb1143957a06c86c403d3, type: 3}
+      propertyPath: DashDistance
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

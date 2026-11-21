@@ -29,6 +29,12 @@ public class PlayerFalling : IPlayerState
         // Grounded
         // NOTE: The player can't jump again, no transition needed
 
+        if (player.DashActive && player.DashCount >= 1)
+        {
+            player.SwitchState(new PlayerDashing());
+            return;
+        }
+
         if (player.Controller.isGrounded)
         {
             player.SwitchState(new PlayerGrounded());

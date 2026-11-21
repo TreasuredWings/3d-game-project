@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     public float TopSpeed = 3f;
     public float Acceleration = 0.5f;
     public float Deceleration = 0.5f;
+    public float DashDistance = 25f;
+    public float DashSpeed = 15f;
+    public int DashMax = 1;
 
     [Header("Jumping and Falling Parameters")]
     public float JumpHeight = 5f;
@@ -32,6 +35,8 @@ public class PlayerController : MonoBehaviour
     public bool MoveInputActive {get; set;} = false;
     public Vector3 IncomingMovement {get; set;} = new Vector3();
     public bool JumpActive {get; set;} = false;
+    public bool DashActive {get; set;} = false;
+    public int DashCount {get; set;}
 
     // Movement-related variables
     public Vector3 HorizontalMovement {get; set;} = new Vector3();
@@ -79,14 +84,9 @@ public class PlayerController : MonoBehaviour
         // Player jump input
         // NOTE: Input buffer is going to be handled by InputManager
         JumpActive = InputManager.inst.IsJumpPressed();
-    }
 
-    public void HandleRotate()
-    {
-        if (MoveInputActive)
-        {
-            transform.forward = IncomingMovement;
-        }
+        // Player dash input
+        DashActive = InputManager.inst.IsDashPressed();
     }
 
     public void ApplyMoves()
@@ -100,6 +100,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        // Initialize unassigned variables
+        DashCount = DashMax;
+
         _state = new PlayerFalling();
         _state.StateEnter(this);
     }
@@ -120,7 +123,6 @@ public class PlayerController : MonoBehaviour
         }
 
         // Handle each state from Super -> Sub
-        HandleRotate();
         _state.StateUpdate(this);
         if (_subState != null)
         {
